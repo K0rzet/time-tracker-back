@@ -142,7 +142,11 @@ export class TimersService {
   }
 
   async update(userId: string, timerId: string, dto: UpdateTimerDto): Promise<Timer> {
-    await this.findOne(userId, timerId);
+    const timer = await this.findOne(userId, timerId);
+
+    if (!timer) {
+      throw new NotFoundException('Таймер не найден');
+    }
 
     return this.prisma.timer.update({
       where: { id: timerId },
