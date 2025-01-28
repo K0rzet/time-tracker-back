@@ -15,9 +15,14 @@ export class ProjectsService {
     });
   }
 
-  async findAll(userId: string) {
+  async findAll(userId: string, categoryId?: string) {
+    const where = {
+      userId,
+      ...(categoryId ? { categoryId } : {}),
+    }
+
     const projects = await this.prisma.project.findMany({
-      where: { userId },
+      where,
       include: {
         timers: {
           select: {
@@ -30,20 +35,26 @@ export class ProjectsService {
             isPaid: true,
           },
         },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
-    });
+    })
 
     return projects.map(project => {
       const totalTime = project.timers.reduce((acc, timer) => {
-        if (!timer.endTime && !timer.isPaused) return acc;
+        if (!timer.endTime && !timer.isPaused) return acc
         
-        const startTime = new Date(timer.startTime).getTime();
+        const startTime = new Date(timer.startTime).getTime()
         const endTime = timer.endTime 
           ? new Date(timer.endTime).getTime()
-          : (timer.isPaused ? new Date(timer.pausedAt).getTime() : Date.now());
+          : (timer.isPaused ? new Date(timer.pausedAt).getTime() : Date.now())
         
-        return acc + Math.floor((endTime - startTime) / 1000) - (timer.totalPause || 0);
-      }, 0);
+        return acc + Math.floor((endTime - startTime) / 1000) - (timer.totalPause || 0)
+      }, 0)
 
       const hasTimers = project.timers.length > 0
       const isPaid = hasTimers && project.timers.every(timer => timer.isPaid)
@@ -52,8 +63,8 @@ export class ProjectsService {
         ...project,
         totalTime,
         isPaid,
-      };
-    });
+      }
+    })
   }
 
   async findOne(userId: string, id: string) {

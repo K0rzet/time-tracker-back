@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto, UpdateProjectDto } from './dto/project.dto';
@@ -24,8 +25,11 @@ export class ProjectsController {
   }
 
   @Get()
-  findAll(@User('id') userId: string) {
-    return this.projectsService.findAll(userId);
+  findAll(
+    @User('id') userId: string,
+    @Query('categoryId') categoryId?: string,
+  ) {
+    return this.projectsService.findAll(userId, categoryId);
   }
 
   @Get(':id')
