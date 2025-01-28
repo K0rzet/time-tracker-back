@@ -27,6 +27,7 @@ export class ProjectsService {
             totalPause: true,
             pausedAt: true,
             name: true,
+            isPaid: true,
           },
         },
       },
@@ -44,9 +45,13 @@ export class ProjectsService {
         return acc + Math.floor((endTime - startTime) / 1000) - (timer.totalPause || 0);
       }, 0);
 
+      const hasTimers = project.timers.length > 0
+      const isPaid = hasTimers && project.timers.every(timer => timer.isPaid)
+
       return {
         ...project,
         totalTime,
+        isPaid,
       };
     });
   }
