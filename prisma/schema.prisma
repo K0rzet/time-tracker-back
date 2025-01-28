@@ -31,17 +31,18 @@ model Project {
 
 model Timer {
   id          String    @id @default(uuid())
-  name        String
+  name        String?
   startTime   DateTime
   endTime     DateTime?
   isPaused    Boolean   @default(false)
   pausedAt    DateTime?
   totalPause  Int       @default(0)
   isPaid      Boolean   @default(false)
+  isLogged    Boolean   @default(false)
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   userId      String
-  projectId   String
   user        User      @relation(fields: [userId], references: [id])
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }

@@ -14,6 +14,8 @@ import { CreateTimerDto, UpdateTimerDto } from './dto/timer.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from '../auth/decorators/user.decorator';
 
+import { JwtPayload } from 'jsonwebtoken';
+
 @Controller('timers')
 @UseGuards(JwtAuthGuard)
 export class TimersController {
@@ -60,12 +62,12 @@ export class TimersController {
   }
 
   @Patch(':id')
-  update(
+  async update(
+    @Param('id') id: string,
+    @Body() updateTimerDto: UpdateTimerDto,
     @User('id') userId: string,
-    @Param('id') timerId: string,
-    @Body() dto: UpdateTimerDto,
   ) {
-    return this.timersService.update(userId, timerId, dto);
+    return this.timersService.update(userId, id, updateTimerDto)
   }
 
   @Delete(':id')

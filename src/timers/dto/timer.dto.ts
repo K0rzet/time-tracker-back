@@ -16,4 +16,8 @@ export class UpdateTimerDto {
   @IsOptional()
   @IsBoolean()
   isPaid?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isLogged?: boolean;
 } 
