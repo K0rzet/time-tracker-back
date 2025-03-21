@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsDate, IsDateString } from 'class-validator';
 
 export class CreateTimerDto {
   @IsString()
@@ -12,6 +12,14 @@ export class UpdateTimerDto {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsDateString()
+  startTime?: string;
 
   @IsOptional()
   @IsBoolean()
