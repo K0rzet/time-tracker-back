@@ -1,7 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
-import { LoginDto, RegisterDto } from './dto/auth.dto';
+import { LoginDto, RegisterDto, ResetPasswordDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -42,6 +42,19 @@ export class AuthService {
     return {
       user: { id: user.id, email: user.email },
       token,
+    };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.usersService.findByEmail(dto.email);
+    if (!user) {
+      throw new NotFoundException('Пользователь с таким email не найден');
+    }
+
+    await this.usersService.resetPassword(dto.email);
+
+    return {
+      message: 'Пароль успешно сброшен. Новый пароль отправлен на вашу почту.',
     };
   }
 }

@@ -22,4 +22,33 @@ export class UsersService {
       },
     });
   }
+
+  async resetPassword(email: string): Promise<User> {
+    // Генерируем новый временный пароль
+    const newPassword = this.generateTemporaryPassword();
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
+    const user = await this.prisma.user.update({
+      where: { email },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    // В реальном приложении здесь нужно отправить email с новым паролем
+    // Для упрощения просто логируем его
+    console.log(`Новый пароль для ${email}: ${newPassword}`);
+
+    return user;
+  }
+
+  private generateTemporaryPassword(): string {
+    const length = 12;
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return password;
+  }
 }
