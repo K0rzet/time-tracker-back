@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
+  id        String   @id @default(uuid())
+  email     String   @unique
   password  String
   timers    Timer[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   Project Project[]
 }
 
 model Category {
+  sortOrder Int       @default(0)
   id        String    @id @default(uuid())
   name      String
   userId    String
@@ -28,6 +29,7 @@ model Category {
 }
 
 model Project {
+  sortOrder   Int       @default(0)
   id          String    @id @default(uuid())
   name        String
   description String?
@@ -42,6 +44,7 @@ model Project {
 }
 
 model Timer {
+  sortOrder   Int       @default(0)
   id          String    @id @default(uuid())
   name        String
   description String?

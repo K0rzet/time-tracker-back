@@ -1,3 +1,4 @@
+import { OrderingModule } from './ordering/ordering.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -16,6 +17,7 @@ import { CategoriesModule } from './categories/categories.module';
     ProjectsModule,
     TimersModule,
     CategoriesModule,
+    OrderingModule,
   ],
 })
 export class AppModule {}

@@ -23,6 +23,7 @@ export class ProjectsService {
 
     const projects = await this.prisma.project.findMany({
       where,
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
       include: {
         timers: {
           select: {
@@ -84,7 +85,7 @@ export class ProjectsService {
       where: { id: projectId, userId },
       include: {
         timers: {
-          orderBy: { startTime: 'desc' },
+          orderBy: [{ sortOrder: 'asc' }, { startTime: 'desc' }, { id: 'asc' }],
         },
       },
     });

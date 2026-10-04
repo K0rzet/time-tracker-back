@@ -9,6 +9,7 @@ export class CategoriesService {
   async findAll(userId: string) {
     return this.prisma.category.findMany({
       where: { userId },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
       include: { _count: { select: { projects: true } } }
     })
   }

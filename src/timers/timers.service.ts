@@ -30,7 +30,7 @@ export class TimersService {
   async findAll(userId: string): Promise<Timer[]> {
     return this.prisma.timer.findMany({
       where: { userId },
-      orderBy: { startTime: 'desc' },
+      orderBy: [{ sortOrder: 'asc' }, { startTime: 'desc' }, { id: 'asc' }],
       include: {
         project: {
           select: {
